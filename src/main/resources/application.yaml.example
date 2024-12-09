@@ -1,0 +1,47 @@
+aws:
+  access:
+    key: access-key
+  secret:
+    key: secret-key
+  s3:
+    region: ap-southeast-2
+    bucket:
+      name: jpn-bucket
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/p3tki
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+dikti:
+  api_key: apikey
+  url:
+    base: https://pddikti.kemdikbud.go.id/api
+    search_student: /pencarian/mhs
+    student_detail: /detail/mhs
+unsia:
+  url:
+    file: ./home/downloads
+server:
+  port: 3002
+springdoc:
+  api-docs:
+    path: /api/v1/docs
+  swagger-ui:
+    path: /api/v1/docs/swagger-ui.html
