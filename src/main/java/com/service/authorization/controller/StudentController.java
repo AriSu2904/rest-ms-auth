@@ -3,6 +3,7 @@ package com.service.authorization.controller;
 import com.service.authorization.dto.common.CommonResponse;
 import com.service.authorization.dto.response.StudentResponse;
 import com.service.authorization.service.StudentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -16,11 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/students")
+@Tag(name = "Student", description = "APIs for student")
 public class StudentController {
 
     private final StudentService studentService;
 
-    @GetMapping("/me")
+    @GetMapping(path = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CommonResponse<StudentResponse>> me(Authentication authentication) {
         StudentResponse profile = studentService.profile(authentication);
 
