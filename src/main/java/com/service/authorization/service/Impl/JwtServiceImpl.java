@@ -32,7 +32,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateToken(UserDetails userDetails) {
-        var expiration = new Date(System.currentTimeMillis() + 1000 * 60 * 2);
+        var expiration = new Date(System.currentTimeMillis() + 1000 * 60 * 24);
         log.info("Generating token with expired time: {}", expiration);
 
         try {
