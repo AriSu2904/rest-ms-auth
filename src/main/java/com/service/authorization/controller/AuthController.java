@@ -34,8 +34,9 @@ public class AuthController {
     }
 
     @PostMapping(path = "/refresh", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<CommonResponse<RefreshTokenResponse>> refresh(@RequestHeader(name = "X-Request-ID") RefreshTokenRequest token) {
-        RefreshTokenResponse login = authService.refreshToken(token);
+    public ResponseEntity<CommonResponse<RefreshTokenResponse>> refresh(@RequestBody RefreshTokenRequest refreshToken) {
+
+        RefreshTokenResponse login = authService.refreshToken(refreshToken);
 
         CommonResponse<RefreshTokenResponse> response = CommonResponse.<RefreshTokenResponse>builder()
                 .data(login)
