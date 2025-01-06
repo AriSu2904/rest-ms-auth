@@ -61,6 +61,8 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void deleteById(String id) {
+        log.info("Deleting profile picture with id: {}", id);
+
         ProfilePicture profilePicture = profilePictureRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Image not found!"));
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,9 +70,6 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
         if(!Objects.equals(authentication.getName(), profilePicture.getStudent().getStudentId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to delete this image!");
         }
-
-        String path = profilePicture.getPath();
-        fileService.delete(path);
         profilePictureRepository.delete(profilePicture);
     }
 }
