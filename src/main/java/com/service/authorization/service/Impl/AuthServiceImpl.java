@@ -11,6 +11,7 @@ import com.service.authorization.service.AuthService;
 import com.service.authorization.service.JwtService;
 import com.service.authorization.service.StudentDataCenterService;
 import com.service.authorization.service.StudentService;
+import com.service.authorization.utils.StringUtils;
 import com.service.authorization.utils.ValidationUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
     private final ValidationUtils validationUtils;
 
     @Override
-    public RegisterResponse register(RegisterRequest request) {
+    public RegisterResponse register(RegisterRequest request, boolean isAdmin) {
         log.info("[AUTH] Registering student with NIM: {}", request.getStudentId());
         try {
             validationUtils.validate(request);
@@ -51,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
             var credential = new EntityCredential();
             credential.setStudentId(request.getStudentId());
             credential.setPassword(passwordEncoder.encode(request.getPassword()));
-            credential.setRole(ERole.ROLE_STUDENT.name());
+            credential.setRole(isAdmin ? ERole.ROLE_ADMIN.name() : ERole.ROLE_STUDENT.name());
 
             credentialService.create(credential);
 
@@ -86,9 +87,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponse login(LoginRequest request, Boolean isAdmin) {
-        log.info("[AUTH] incoming login request isAdmin: {}", isAdmin);
-
+    public LoginResponse login(LoginRequest request) {
         try {
             validationUtils.validate(request);
 
@@ -104,11 +103,14 @@ public class AuthServiceImpl implements AuthService {
 
             String token = jwtService.generateToken(credential);
             String refreshToken = jwtService.generateRefreshToken(new HashMap<>(), credential);
+            Student studentData = studentService.findByStudentId(request.getStudentId());
 
             return LoginResponse.builder()
                     .studentId(credential.getStudentId())
+                    .nickname(StringUtils.getNickname(studentData.getFullName()))
                     .role(credential.getRole())
                     .token(token)
+                    .student(studentData.toResponse())
                     .refreshToken(refreshToken)
                     .build();
         } catch (Exception e) {

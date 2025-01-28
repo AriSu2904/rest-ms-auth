@@ -8,7 +8,7 @@ import com.service.authorization.dto.response.RefreshTokenResponse;
 import com.service.authorization.dto.response.RegisterResponse;
 
 public interface AuthService {
-    RegisterResponse register(RegisterRequest request);
-    LoginResponse login(LoginRequest request, Boolean isAdmin);
+    RegisterResponse register(RegisterRequest request, boolean isAdmin);
+    LoginResponse login(LoginRequest request);
     RefreshTokenResponse refreshToken(RefreshTokenRequest token);
 }

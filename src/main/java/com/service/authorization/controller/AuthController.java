@@ -24,7 +24,7 @@ public class AuthController {
 
     @PostMapping(path = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<CommonResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
-        LoginResponse login = authService.login(request, false);
+        LoginResponse login = authService.login(request);
 
         CommonResponse<LoginResponse> response = CommonResponse.<LoginResponse>builder()
                 .data(login)
@@ -47,7 +47,17 @@ public class AuthController {
 
     @PostMapping(path = "/register", consumes = "application/json", produces = "application/json")
     public ResponseEntity<CommonResponse<RegisterResponse>> register(@RequestBody RegisterRequest request) {
-        RegisterResponse register = authService.register(request);
+        RegisterResponse register = authService.register(request, false);
+
+        CommonResponse<RegisterResponse> response = CommonResponse.<RegisterResponse>builder()
+                .data(register)
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping(path = "/register/kelompok-7/admin", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CommonResponse<RegisterResponse>> registerAdmin(@RequestBody RegisterRequest request) {
+        RegisterResponse register = authService.register(request, true);
 
         CommonResponse<RegisterResponse> response = CommonResponse.<RegisterResponse>builder()
                 .data(register)

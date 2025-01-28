@@ -1,5 +1,6 @@
 package com.service.authorization.entity;
 
+import com.service.authorization.dto.response.StudentResponse;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
@@ -31,4 +32,17 @@ public class Student extends Auditable<String> {
     private ProfilePicture profilePicture;
     @OneToOne
     private EntityCredential credential;
+
+    public StudentResponse toResponse() {
+        return StudentResponse.builder()
+                .fullName(fullName)
+                .studentId(studentId)
+                .campus(campus)
+                .major(major)
+                .status(status)
+                .gender(gender)
+                .level(level)
+                .joinDate(joinDate)
+                .build();
+    }
 }
